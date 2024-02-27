@@ -88,7 +88,7 @@ function processComments(games, res) {
     processGame(0);
 }
 
-app.post('/games/:game_id', (req, res) => {
+app.post('/games', (req, res) => {
     const { game_id, comment, vote } = req.body;
     if (game_id !== undefined) {
         const commentSql = "INSERT INTO games_comments (game_id, comment, vote) VALUES (?, ?, ?)";
