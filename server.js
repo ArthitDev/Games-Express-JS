@@ -105,12 +105,12 @@ app.post('/games', (req, res) => {
         });
     }
     else {
-        const { game_id, game_name, game_description, img, game_type } = req.body;
-        const gameSql = "INSERT INTO games (game_name, game_description, img, game_type) VALUES (? ,?, ?, ?, ?)";
-        connection.query(gameSql, [game_id, game_name, game_description, img, game_type], (err) => {
+        const { game_name, game_description, img, game_type } = req.body;
+        const gameSql = "INSERT INTO games (game_name, game_description, img, game_type) VALUES (?, ?, ?, ?)";
+        connection.query(gameSql, [game_name, game_description, img, game_type], (err) => {
             if (err) {
                 console.error(err);
-                return res.status(500).json({ status: 'error', message: 'ตรงนี้เข้า Error บรรทัด 108 เพิ่มเกม ไม่เข้า' });
+                return res.status(500).json({ status: 'error', message: 'ตรงนี้เข้า Error บรรทัด 113 เพิ่มเกม ไม่เข้า' });
             }
             res.json({ status: 'success', message: 'Game data inserted successfully' });
         });
