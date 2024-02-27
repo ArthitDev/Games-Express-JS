@@ -15,6 +15,9 @@ app.use(bodyParser.json());
 const connection = mysql.createConnection(process.env.DATABASE_URL)
 
 
+app.get('/', (res) => {
+    res.send("Main Path Work : Connection Success");
+});
 
 
 app.get('/games', (req, res) => {
