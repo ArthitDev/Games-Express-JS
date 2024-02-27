@@ -14,11 +14,11 @@ app.use(bodyParser.json());
 const connection = mysql.createConnection(process.env.DATABASE_URL)
 
 app.use(cors({
-    origin: 'https://react-games-voting.vercel.app/'
+    origin: 'https://react-games-voting.vercel.app'
 }));
 
 
-app.get('/games', (req, res) => {
+app.get('/', (req, res) => {
     const updateSql = "UPDATE games SET score = (SELECT AVG(vote) FROM games_comments WHERE games_comments.game_id = games.game_id) WHERE EXISTS (SELECT 1 FROM games_comments WHERE games_comments.game_id = games.game_id)";
     connection.query(updateSql, (updateErr, updateResults) => {
         if (updateErr) {
