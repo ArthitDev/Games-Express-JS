@@ -93,7 +93,7 @@ function processComments(games, res) {
 }
 
 app.post('/games', (req, res) => {
-    const { game_id, comment, vote, username } = req.body;
+    const { game_name, game_description, img, game_type, game_id, comment, vote , username } = req.body;
     if (game_id !== undefined) {
         const commentSql = "INSERT INTO games_comments (game_id, comment, vote, username) VALUES (?, ?, ?, ?)";;
         connection.query(commentSql, [game_id, comment, vote, username], (err) => {
@@ -105,7 +105,6 @@ app.post('/games', (req, res) => {
         });
     }
     else {
-        const { game_name, game_description, img, game_type } = req.body;
         const gameSql = "INSERT INTO games (game_name, game_description, img, game_type) VALUES (?, ?, ?, ?)";
         connection.query(gameSql, [game_name, game_description, img, game_type], (err) => {
             if (err) {
