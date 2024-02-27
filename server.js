@@ -93,9 +93,9 @@ function processComments(games, res) {
 }
 
 app.post('/games', (req, res) => {
-    const { game_name, game_description, img, game_type } = req.body;
+    const { game_id, game_name, game_description, img, game_type } = req.body;
     const gameSql = "INSERT INTO games (game_name, game_description, img, game_type) VALUES (?, ?, ?, ?)";
-    connection.query(gameSql, [game_name, game_description, img, game_type], (err) => {
+    connection.query(gameSql, [game_id, game_name, game_description, img, game_type], (err) => {
         if (err) {
             console.error(err);
             return res.status(500).json({ status: 'error', message: 'ตรงนี้เข้า Error บรรทัด 101 เพิ่มเกม ไม่เข้า' });
