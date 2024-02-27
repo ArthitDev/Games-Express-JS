@@ -87,8 +87,8 @@ function processComments(games, res) {
     processGame(0);
 }
 
-app.post('/games', (req, res) => {
-    const {game_id, comment, vote } = req.body;
+app.post('/games/:game_id', (req, res) => {
+    const { game_id, comment, vote } = req.body;
     if (game_id !== undefined) {
         const commentSql = "INSERT INTO games_comments (game_id, comment, vote) VALUES (?, ?, ?)";
         connection.query(commentSql, [game_id, comment, vote], (err) => {
@@ -100,7 +100,6 @@ app.post('/games', (req, res) => {
             res.json({ status: 'success', message: 'Comment data inserted successfully' });
         });
     } else {
-        // It's a new game insertion
         const { game_name, game_description, img, game_type } = req.body;
         const gameSql = "INSERT INTO games (game_name, game_description, img, game_type) VALUES (?, ?, ?, ?)";
         connection.query(gameSql, [game_name, game_description, img, game_type], (err) => {
