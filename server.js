@@ -10,10 +10,10 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'http://localhost:5173','https://react-games-voting.vercel.app/');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
-  next();
+    res.header('Access-Control-Allow-Origin', 'https://react-games-voting.vercel.app/');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    next();
 });
 
 
