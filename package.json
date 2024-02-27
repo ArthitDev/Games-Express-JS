@@ -9,22 +9,5 @@
   },
   "scripts": {
     "webserver": "nodemon server.js"
-  },
-  "routes": [
-    {
-      "src": "/(.*)",
-      "methods": [
-        "GET",
-        "POST",
-        "PUT",
-        "DELETE",
-        "PATCH",
-        "OPTIONS",
-        "FETCH"
-      ],
-      "headers": {
-        "Access-Control-Allow-Origin": "*"
-      }
-    }
-  ]
+  }
 }

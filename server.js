@@ -4,7 +4,7 @@ const cors = require('cors');
 const mysql = require('mysql2');
 require('dotenv').config()
 
-app.use(cors());
+
 
 const app = express();
 app.use(bodyParser.json());
@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 
 
 const connection = mysql.createConnection(process.env.DATABASE_URL)
-
+app.use(cors());
 
 app.get('/games', (req, res) => {
     const updateSql = "UPDATE games SET score = (SELECT AVG(vote) FROM games_comments WHERE games_comments.game_id = games.game_id) WHERE EXISTS (SELECT 1 FROM games_comments WHERE games_comments.game_id = games.game_id)";
