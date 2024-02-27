@@ -18,7 +18,7 @@ app.use(cors({
 }));
 
 
-app.get('/', (req, res) => {
+app.get('/games', (req, res) => {
     const updateSql = "UPDATE games SET score = (SELECT AVG(vote) FROM games_comments WHERE games_comments.game_id = games.game_id) WHERE EXISTS (SELECT 1 FROM games_comments WHERE games_comments.game_id = games.game_id)";
     connection.query(updateSql, (updateErr, updateResults) => {
         if (updateErr) {
