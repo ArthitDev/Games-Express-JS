@@ -88,16 +88,30 @@ function processComments(games, res) {
 }
 
 app.post('/games', (req, res) => {
-    const { game_name, game_description, img, game_type, } = req.body;
-    const gameSql = "INSERT INTO games (game_name, game_description, img, game_type) VALUES (?, ?, ?, ?)";
-    connection.query(gameSql, [game_name, game_description, img, game_type], (err) => {
-        if (err) {
-            console.error(err);
-            return res.status(500).json({ status: 'error', message: 'Error inserting game data' });
-        }
+    const { game_name, game_description, img, game_type, game_id, comment, vote } = req.body;
 
-        res.json({ status: 'success', message: 'Game data inserted successfully' });
-    });
+    if (game_id !== undefined) {
+        const commentSql = "INSERT INTO games_comments (game_id, comment, vote) VALUES (?, ?, ?)";
+        connection.query(commentSql, [game_id, comment, vote], (err) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({ status: 'error', message: 'Error inserting comment data' });
+            }
+
+            res.json({ status: 'success', message: 'Comment data inserted successfully' });
+        });
+    } else {
+        // It's a new game insertion
+        const gameSql = "INSERT INTO games (game_name, game_description, img, game_type) VALUES (?, ?, ?, ?)";
+        connection.query(gameSql, [game_name, game_description, img, game_type], (err) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({ status: 'error', message: 'Error inserting Game data' });
+            }
+
+            res.json({ status: 'success', message: 'Game data inserted successfully' });
+        });
+    }
 });
 
 
