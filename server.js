@@ -88,30 +88,17 @@ function processComments(games, res) {
     processGame(0);
 }
 
-app.post('/games/:game_id', (req, res) => {
-    const { game_id, comment, vote } = req.body;
-    if (game_id !== undefined) {
-        const commentSql = "INSERT INTO games_comments VALUES (?, ?, ?)";
-        connection.query(commentSql, [game_id, comment, vote], (err) => {
-            if (err) {
-                console.error(err);
-                return res.status(500).json({ status: 'error', message: 'ตรงนี้เข้า Error บรรทัด 97 Comment ไม่เข้า' });
-            }
+app.post('/games', (req, res) => {
+    const { game_id, comment, vote, username } = req.body;
+    const commentSql = "INSERT INTO games_comments (game_id, comment, vote, username) VALUES (?, ?, ?, ?)";;
+    connection.query(commentSql, [game_id, comment, vote, username], (err) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ status: 'error', message: 'ตรงนี้เข้า Error บรรทัด 97 Comment ไม่เข้า' });
+        }
 
-            res.json({ status: 'success', message: 'Comment data inserted successfully' });
-        });
-    } else {
-        // It's a new game insertion
-        const gameSql = "INSERT INTO games (game_name, game_description, img, game_type) VALUES (?, ?, ?, ?)";
-        connection.query(gameSql, [game_name, game_description, img, game_type], (err) => {
-            if (err) {
-                console.error(err);
-                return res.status(500).json({ status: 'error', message: 'ตรงนี้เข้า Error บรรทัด 108 เพิ่มเกม ไม่เข้า' });
-            }
-
-            res.json({ status: 'success', message: 'Game data inserted successfully' });
-        });
-    }
+        res.json({ status: 'success', message: 'Comment data inserted successfully' });
+    });
 });
 
 
