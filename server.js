@@ -94,7 +94,7 @@ function processComments(games, res) {
 
 app.post('/games', (req, res) => {
     const { game_id, game_name, game_description, img, game_type } = req.body;
-    const gameSql = "INSERT INTO games (game_name, game_description, img, game_type) VALUES (?, ?, ?, ?)";
+    const gameSql = "INSERT INTO games (game_id , game_name, game_description, img, game_type) VALUES (? ,?, ?, ?, ?)";
     connection.query(gameSql, [game_id, game_name, game_description, img, game_type], (err) => {
         if (err) {
             console.error(err);
