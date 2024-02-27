@@ -93,13 +93,13 @@ function processComments(games, res) {
 }
 
 app.post('/games', (req, res) => {
-    const { game_name, game_description, img, game_type, game_id, comment, vote , username } = req.body;
-    if (game_id !== undefined) {
+    const { game_name, game_description, img, game_type, game_id, comment, vote, username } = req.body;
+    if (!game_id) {
         const commentSql = "INSERT INTO games_comments (game_id, comment, vote, username) VALUES (?, ?, ?, ?)";;
         connection.query(commentSql, [game_id, comment, vote, username], (err) => {
             if (err) {
                 console.error(err);
-                return res.status(500).json({ status: 'error', message: 'ตรงนี้เข้า Error บรรทัด 97 Comment ไม่เข้า' });
+                return res.status(500).json({ status: 'error', message: 'ตรงนี้เข้า Error บรรทัด 102 Comment ไม่เข้า' });
             }
             res.json({ status: 'success', message: 'Comment data inserted successfully' });
         });
@@ -109,7 +109,7 @@ app.post('/games', (req, res) => {
         connection.query(gameSql, [game_name, game_description, img, game_type], (err) => {
             if (err) {
                 console.error(err);
-                return res.status(500).json({ status: 'error', message: 'ตรงนี้เข้า Error บรรทัด 113 เพิ่มเกม ไม่เข้า' });
+                return res.status(500).json({ status: 'error', message: 'ตรงนี้เข้า Error บรรทัด 112 เพิ่มเกม ไม่เข้า' });
             }
             res.json({ status: 'success', message: 'Game data inserted successfully' });
         });
