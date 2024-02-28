@@ -10,20 +10,20 @@ const app = express();
 
 app.use(bodyParser.json());
 
-app.use(cors());
+app.use(cors())
 
 
 
 const connection = mysql.createConnection(process.env.DATABASE_URL)
 
 
-app.get('/', (req, res) => {
+app.get('/', (req, res, next) => {
     console.log("Connection API Success")
     res.send("Main Path Work : Connection Success");
 });
 
 
-app.get('/games', (req, res) => {
+app.get('/games', (req, res , next) => {
     const updateSql = "UPDATE games SET score = (SELECT AVG(vote) FROM games_comments WHERE games_comments.game_id = games.game_id) WHERE EXISTS (SELECT 1 FROM games_comments WHERE games_comments.game_id = games.game_id)";
     connection.query(updateSql, (updateErr, updateResults) => {
         if (updateErr) {
@@ -57,7 +57,7 @@ app.get('/games', (req, res) => {
     });
 });
 
-function processComments(games, res) {
+function processComments(games, res , next) {
     const results = [];
 
     function processGame(index) {
@@ -95,7 +95,7 @@ function processComments(games, res) {
 }
 
 
-app.put('/games/:game_id', (req, res) => {
+app.put('/games/:game_id', (req, res , next) => {
     const { game_id, game_name, game_description, img, game_type } = req.body;
     const sql = "UPDATE games SET game_name=?, game_description=?, img=?, game_type=? WHERE game_id=?";
     connection.query(sql, [game_name, game_description, img, game_type, game_id], (err) => {
@@ -108,7 +108,7 @@ app.put('/games/:game_id', (req, res) => {
     });
 });
 
-app.post('/games', (req, res) => {
+app.post('/games', cors() ,(req, res , next) => {
     const { game_name, game_description, img, game_type, game_id, comment, vote, username } = req.body;
     if (game_id === undefined) {
         const gameSql = "INSERT INTO games (game_name, game_description, img, game_type) VALUES (?, ?, ?, ?)";
@@ -132,7 +132,7 @@ app.post('/games', (req, res) => {
     }
 });
 
-app.delete('/games/:game_id', (req, res) => {
+app.delete('/games/:game_id', (req, res , next) => {
     const game_id = req.params.game_id;
     const sql = "DELETE FROM games WHERE game_id = ?";
     connection.query(sql, [game_id], (err) => {
