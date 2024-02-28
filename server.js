@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 
 const corsOptions = {
     origin: 'https://react-games-voting.vercel.app',
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    methods: '*',
     optionsSuccessStatus: 204,
 };
 
