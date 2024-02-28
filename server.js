@@ -9,13 +9,13 @@ const app = express();
 app.use(bodyParser.json());
 
 const corsOptions = {
-    origin: 'https://react-games-voting.vercel.app/',
+    origin: 'https://react-games-voting.vercel.app',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  };
-  
-  app.use(cors(corsOptions));
-  
-  app.use(bodyParser.json());
+};
+
+app.use(cors(corsOptions));
+
+app.use(bodyParser.json());
 
 
 
