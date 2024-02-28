@@ -8,7 +8,15 @@ const app = express();
 
 app.use(bodyParser.json());
 
-app.use(cors())
+// app.use(cors())
+const corsOptions = {
+    origin: ['https://react-games-voting.vercel.app', 'https://react-games-voting.vercel.app/dashboard'],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+    optionsSuccessStatus: 204,
+};
+
+app.use(cors(corsOptions));
 
 app.use(bodyParser.json());
 
@@ -117,7 +125,6 @@ app.post('/games', (req, res) => {
                 console.error(err);
                 return res.status(500).json({ status: 'error', message: 'Error เพิ่มเกม ไม่เข้า' });
             }
-            res.setHeader('Access-Control-Allow-Origin', '*');
             res.json({ status: 'success', message: 'เพิ่มเกมแล้ว' });
         });
     } else {
@@ -127,7 +134,6 @@ app.post('/games', (req, res) => {
                 console.error(err);
                 return res.status(500).json({ status: 'error', message: 'Error เพิ่มความคิดเห็น ไม่เข้า' });
             }
-            res.setHeader('Access-Control-Allow-Origin', '*');
             res.json({ status: 'success', message: 'เพิ่มความคิดเห็นแล้ว' });
         });
     }
