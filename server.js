@@ -108,6 +108,7 @@ app.post('/games', (req, res) => {
     const { comment, game_id, vote, username, game_name, game_description, img, game_type } = req.body;
     if (game_id === undefined) {
         const InsertGames = "INSERT INTO games (game_name, game_description, img, game_type) VALUES (?, ?, ?, ?)";
+        console.log(InsertGames, values);
         connection.query(InsertGames, [game_name, game_description, img, game_type], (err) => {
             if (err) {
                 console.error(err);
