@@ -23,29 +23,6 @@ app.get('/', (req, res) => {
     res.send("Main Path Work : Connection Success");
 });
 
-app.post('/games', (req, res) => {
-    const { game_name, game_description, img, game_type } = req.body;
-    // if (game_id === undefined) {
-    const InsertGames = "INSERT INTO games (game_name, game_description, img, game_type) VALUES (?, ?, ?, ?)";
-    connection.query(InsertGames, [game_name, game_description, img, game_type], (err) => {
-        if (err) {
-            console.error(err);
-            return res.status(500).json({ status: 'error', message: 'Error เพิ่มเกม ไม่เข้า' });
-        }
-        res.json({ status: 'success', message: 'เพิ่มเกมแล้ว' });
-    });
-    // }
-    // else {
-    //     const commentSql = "INSERT INTO games_comments (game_id, comment, vote, username) VALUES (?, ?, ?, ?)";
-    //     connection.query(commentSql, [game_id, comment, vote, username], (err) => {
-    //         if (err) {
-    //             console.error(err);
-    //             return res.status(500).json({ status: 'error', message: 'Error เพิ่มความคิดเห็น ไม่เข้า' });
-    //         }
-    //         res.json({ status: 'success', message: 'เพิ่มความคิดเห็นแล้ว' });
-    //     });
-    // }
-});
 
 app.get('/games', (req, res) => {
     const updateSql = "UPDATE games SET score = (SELECT AVG(vote) FROM games_comments WHERE games_comments.game_id = games.game_id) WHERE EXISTS (SELECT 1 FROM games_comments WHERE games_comments.game_id = games.game_id)";
@@ -95,8 +72,8 @@ function processComments(games, res) {
         }
         const game = games[index];
         const game_id = game.game_id;
-        const sqlcomment = "SELECT * FROM games_comments WHERE game_id = ?";
-        connection.query(sqlcomment, [game_id], (err, comments) => {
+        const sqlComment = "SELECT * FROM games_comments WHERE game_id = ?";
+        connection.query(sqlComment, [game_id], (err, comments) => {
             if (err) {
                 console.error(err);
                 return res.status(500).json({ status: 'error', message: 'Internal Server Error' });
@@ -132,6 +109,29 @@ app.put('/games/:game_id', (req, res) => {
     });
 });
 
+app.post('/games', (req, res) => {
+    const { game_name, game_description, img, game_type } = req.body;
+    // if (game_id === undefined) {
+    const InsertGames = "INSERT INTO games (game_name, game_description, img, game_type) VALUES (game_name, game_description, img, game_type)";
+    connection.query(InsertGames, [game_name, game_description, img, game_type], (err) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ status: 'error', message: 'Error เพิ่มเกม ไม่เข้า' });
+        }
+        res.json({ status: 'success', message: 'เพิ่มเกมแล้ว' });
+    });
+    // }
+    // else {
+    //     const commentSql = "INSERT INTO games_comments (game_id, comment, vote, username) VALUES (?, ?, ?, ?)";
+    //     connection.query(commentSql, [game_id, comment, vote, username], (err) => {
+    //         if (err) {
+    //             console.error(err);
+    //             return res.status(500).json({ status: 'error', message: 'Error เพิ่มความคิดเห็น ไม่เข้า' });
+    //         }
+    //         res.json({ status: 'success', message: 'เพิ่มความคิดเห็นแล้ว' });
+    //     });
+    // }
+});
 
 app.delete('/games/:game_id', (req, res, next) => {
     const game_id = req.params.game_id;
