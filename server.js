@@ -6,12 +6,16 @@ require('dotenv').config()
 
 const app = express();
 
-
-app.use(cors())
-
 app.use(bodyParser.json());
 
-
+const corsOptions = {
+    origin: 'https://react-games-voting.vercel.app/',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  };
+  
+  app.use(cors(corsOptions));
+  
+  app.use(bodyParser.json());
 
 
 
@@ -110,9 +114,9 @@ app.put('/games/:game_id', (req, res) => {
 });
 
 app.post('/games', (req, res) => {
-    let { game_name, game_description, img, game_type } = req.body;
+    const { game_name, game_description, img, game_type } = req.body;
     // if (game_id === undefined) {
-    let InsertGames = "INSERT INTO games (game_name, game_description, img, game_type) VALUES (?, ?, ?, ?)";
+    const InsertGames = "INSERT INTO games (game_name, game_description, img, game_type) VALUES (?, ?, ?, ?)";
     connection.query(InsertGames, [game_name, game_description, img, game_type], (err) => {
         if (err) {
             console.error(err);
