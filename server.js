@@ -95,9 +95,19 @@ function processComments(games, res) {
 }
 
 app.post('/games', (req, res) => {
-    const { game_id, comment, vote, username } = req.body;
-    const { game_name, game_description, img, game_type, } = req.body;
-    if (game_id !== undefined) {
+    if (game_id === undefined) {
+        const { game_name, game_description, img, game_type, } = req.body;
+        const gameSql = "INSERT INTO games (game_name, game_description, img, game_type) VALUES (?, ?, ?, ?)";
+        connection.query(gameSql, [game_name, game_description, img, game_type], (err) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({ status: 'error', message: 'Error บรรทัด 115 เพิ่มเกม ไม่เข้า' });
+            }
+            res.json({ status: 'success', message: 'เพิ่มเกมแล้ว' });
+        });
+    }
+    else {
+        const { game_id, comment, vote, username } = req.body;
         const commentSql = "INSERT INTO games_comments (game_id, comment, vote, username) VALUES (?, ?, ?, ?)";;
         connection.query(commentSql, [game_id, comment, vote, username], (err) => {
             if (err) {
@@ -105,16 +115,6 @@ app.post('/games', (req, res) => {
                 return res.status(500).json({ status: 'error', message: 'Error บรรทัด 104 Comment ไม่เข้า' });
             }
             res.json({ status: 'success', message: 'เพิ่มความคิดเห็นแล้ว' });
-        });
-    }
-    else {
-        const gameSql = "INSERT INTO games (game_name, game_description, img, game_type) VALUES (:game_name, :game_description, :img, :game_type)";
-        connection.query(gameSql, [game_name, game_description, img, game_type], (err) => {
-            if (err) {
-                console.error(err);
-                return res.status(500).json({ status: 'error', message: 'Error บรรทัด 115 เพิ่มเกม ไม่เข้า' });
-            }
-            res.json({ status: 'success', message: 'เพิ่มเกมแล้ว' });
         });
     }
 });
