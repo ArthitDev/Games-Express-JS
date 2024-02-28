@@ -7,11 +7,13 @@ require('dotenv').config()
 const app = express();
 
 
+
+app.use(bodyParser.json());
+
 app.use(cors({
     origin: '*'
 }));
 
-app.use(bodyParser.json());
 
 
 const connection = mysql.createConnection(process.env.DATABASE_URL)
