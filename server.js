@@ -94,6 +94,20 @@ function processComments(games, res) {
     processGame(0);
 }
 
+
+app.put('/games/:game_id', (req, res) => {
+    const { game_id, game_name, game_description, img, game_type } = req.body;
+    const sql = "UPDATE games SET game_name=?, game_description=?, img=?, game_type=? WHERE game_id=?";
+    connection.query(sql, [game_name, game_description, img, game_type, game_id], (err) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ status: 'error', message: 'Error updating record' });
+        }
+
+        res.json({ status: 'success', message: 'Record updated successfully' });
+    });
+});
+
 app.post('/games', (req, res) => {
     const { game_name, game_description, img, game_type, game_id, comment, vote, username } = req.body;
     if (game_id === undefined) {
@@ -116,21 +130,6 @@ app.post('/games', (req, res) => {
             res.json({ status: 'success', message: 'เพิ่มความคิดเห็นแล้ว' });
         });
     }
-});
-
-
-
-app.put('/games/:game_id', (req, res) => {
-    const { game_id, game_name, game_description, img, game_type } = req.body;
-    const sql = "UPDATE games SET game_name=?, game_description=?, img=?, game_type=? WHERE game_id=?";
-    connection.query(sql, [game_name, game_description, img, game_type, game_id], (err) => {
-        if (err) {
-            console.error(err);
-            return res.status(500).json({ status: 'error', message: 'Error updating record' });
-        }
-
-        res.json({ status: 'success', message: 'Record updated successfully' });
-    });
 });
 
 app.delete('/games/:game_id', (req, res) => {
