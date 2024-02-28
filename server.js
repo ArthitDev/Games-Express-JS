@@ -108,7 +108,7 @@ app.post('/games', (req, res) => {
         });
     }
     else {
-        const gameSql = "INSERT INTO games (game_name, game_description, img, game_type) VALUES (?, ?, ?, ?)";
+        const gameSql = "INSERT INTO games (game_name, game_description, img, game_type) VALUES (:game_name, :game_description, :img, :game_type)";
         connection.query(gameSql, [game_name, game_description, img, game_type], (err) => {
             if (err) {
                 console.error(err);
