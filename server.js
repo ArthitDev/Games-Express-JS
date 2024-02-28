@@ -106,7 +106,7 @@ app.post('/games', (req, res) => {
             res.json({ status: 'success', message: 'เพิ่มความคิดเห็นแล้ว' });
         });
     }
-    if (game_id == null) {
+    else{
         const { game_name, game_description, img, game_type, } = req.body;
         const gameSql = "INSERT INTO games (game_name, game_description, img, game_type) VALUES (?, ?, ?, ?)";
         connection.query(gameSql, [game_name, game_description, img, game_type], (err) => {
