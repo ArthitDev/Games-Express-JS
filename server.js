@@ -111,14 +111,15 @@ app.put('/games/:game_id', (req, res) => {
 app.post('/games', (req, res) => {
     const { comment, game_id, vote, username, game_name, game_description, img, game_type } = req.body;
     if (game_id === undefined) {
-    const InsertGames = "INSERT INTO games (game_name, game_description, img, game_type) VALUES (?, ?, ?, ?)";
-    connection.query(InsertGames, [game_name, game_description, img, game_type], (err) => {
-        if (err) {
-            console.error(err);
-            return res.status(500).json({ status: 'error', message: 'Error เพิ่มเกม ไม่เข้า' });
-        }
-        res.json({ status: 'success', message: 'เพิ่มเกมแล้ว' });
-    });
+        const { game_name, game_description, img, game_type } = req.body;
+        const InsertGames = "INSERT INTO games (game_name, game_description, img, game_type) VALUES (?, ?, ?, ?)";
+        connection.query(InsertGames, [game_name, game_description, img, game_type], (err) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({ status: 'error', message: 'Error เพิ่มเกม ไม่เข้า' });
+            }
+            res.json({ status: 'success', message: 'เพิ่มเกมแล้ว' });
+        });
     }
     else {
         const commentSql = "INSERT INTO games_comments (game_id, comment, vote, username) VALUES (?, ?, ?, ?)";
