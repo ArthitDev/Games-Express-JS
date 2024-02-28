@@ -7,23 +7,24 @@ require('dotenv').config()
 const app = express();
 
 
+app.use(cors())
 
 app.use(bodyParser.json());
 
-app.use(cors())
+
 
 
 
 const connection = mysql.createConnection(process.env.DATABASE_URL)
 
 
-app.get('/', (req, res, next) => {
+app.get('/', (req, res) => {
     console.log("Connection API Success")
     res.send("Main Path Work : Connection Success");
 });
 
 
-app.get('/games', (req, res , next) => {
+app.get('/games', (req, res) => {
     const updateSql = "UPDATE games SET score = (SELECT AVG(vote) FROM games_comments WHERE games_comments.game_id = games.game_id) WHERE EXISTS (SELECT 1 FROM games_comments WHERE games_comments.game_id = games.game_id)";
     connection.query(updateSql, (updateErr, updateResults) => {
         if (updateErr) {
@@ -57,7 +58,7 @@ app.get('/games', (req, res , next) => {
     });
 });
 
-function processComments(games, res , next) {
+function processComments(games, res) {
     const results = [];
 
     function processGame(index) {
@@ -95,7 +96,7 @@ function processComments(games, res , next) {
 }
 
 
-app.put('/games/:game_id', (req, res , next) => {
+app.put('/games/:game_id', (req, res) => {
     const { game_id, game_name, game_description, img, game_type } = req.body;
     const sql = "UPDATE games SET game_name=?, game_description=?, img=?, game_type=? WHERE game_id=?";
     connection.query(sql, [game_name, game_description, img, game_type, game_id], (err) => {
@@ -108,31 +109,31 @@ app.put('/games/:game_id', (req, res , next) => {
     });
 });
 
-app.post('/games', cors() ,(req, res , next) => {
+app.post('/games', (req, res) => {
     const { game_name, game_description, img, game_type, game_id, comment, vote, username } = req.body;
-    if (game_id === undefined) {
-        const gameSql = "INSERT INTO games (game_name, game_description, img, game_type) VALUES (?, ?, ?, ?)";
-        connection.query(gameSql, [game_name, game_description, img, game_type], (err) => {
-            if (err) {
-                console.error(err);
-                return res.status(500).json({ status: 'error', message: 'Error เพิ่มเกม ไม่เข้า' });
-            }
-            res.json({ status: 'success', message: 'เพิ่มเกมแล้ว' });
-        });
-    }
-    else {
-        const commentSql = "INSERT INTO games_comments (game_id, comment, vote, username) VALUES (?, ?, ?, ?)";
-        connection.query(commentSql, [game_id, comment, vote, username], (err) => {
-            if (err) {
-                console.error(err);
-                return res.status(500).json({ status: 'error', message: 'Error เพิ่มความคิดเห็น ไม่เข้า' });
-            }
-            res.json({ status: 'success', message: 'เพิ่มความคิดเห็นแล้ว' });
-        });
-    }
+    // if (game_id === undefined) {
+    const gameSql = "INSERT INTO games (game_name, game_description, img, game_type) VALUES (?, ?, ?, ?)";
+    connection.query(gameSql, [game_name, game_description, img, game_type], (err) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ status: 'error', message: 'Error เพิ่มเกม ไม่เข้า' });
+        }
+        res.json({ status: 'success', message: 'เพิ่มเกมแล้ว' });
+    });
+    // }
+    // else {
+    //     const commentSql = "INSERT INTO games_comments (game_id, comment, vote, username) VALUES (?, ?, ?, ?)";
+    //     connection.query(commentSql, [game_id, comment, vote, username], (err) => {
+    //         if (err) {
+    //             console.error(err);
+    //             return res.status(500).json({ status: 'error', message: 'Error เพิ่มความคิดเห็น ไม่เข้า' });
+    //         }
+    //         res.json({ status: 'success', message: 'เพิ่มความคิดเห็นแล้ว' });
+    //     });
+    // }
 });
 
-app.delete('/games/:game_id', (req, res , next) => {
+app.delete('/games/:game_id', (req, res, next) => {
     const game_id = req.params.game_id;
     const sql = "DELETE FROM games WHERE game_id = ?";
     connection.query(sql, [game_id], (err) => {
