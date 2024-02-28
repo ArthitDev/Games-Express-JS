@@ -117,20 +117,22 @@ app.post('/games', (req, res) => {
                 console.error(err);
                 return res.status(500).json({ status: 'error', message: 'Error เพิ่มเกม ไม่เข้า' });
             }
+            res.setHeader('Access-Control-Allow-Origin', '*');
             res.json({ status: 'success', message: 'เพิ่มเกมแล้ว' });
         });
-    }
-    else {
+    } else {
         const commentSql = "INSERT INTO games_comments (game_id, comment, vote, username) VALUES (?, ?, ?, ?)";
         connection.query(commentSql, [game_id, comment, vote, username], (err) => {
             if (err) {
                 console.error(err);
                 return res.status(500).json({ status: 'error', message: 'Error เพิ่มความคิดเห็น ไม่เข้า' });
             }
+            res.setHeader('Access-Control-Allow-Origin', '*');
             res.json({ status: 'success', message: 'เพิ่มความคิดเห็นแล้ว' });
         });
     }
 });
+
 
 app.delete('/games/:game_id', (req, res, next) => {
     const game_id = req.params.game_id;
