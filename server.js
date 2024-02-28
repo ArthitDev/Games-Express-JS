@@ -8,15 +8,7 @@ const app = express();
 
 app.use(bodyParser.json());
 
-// app.use(cors())
-const corsOptions = {
-    origin: ['https://react-games-voting.vercel.app', 'https://react-games-voting.vercel.app/dashboard'],
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true,
-    optionsSuccessStatus: 204,
-};
-
-app.use(cors(corsOptions));
+app.use(cors())
 
 app.use(bodyParser.json());
 
