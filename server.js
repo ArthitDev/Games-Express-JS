@@ -8,7 +8,7 @@ const app = express();
 
 app.use(bodyParser.json());
 
-
+app.use(cors())
 
 app.use(bodyParser.json());
 
@@ -145,4 +145,4 @@ app.delete('/games/:game_id', (req, res, next) => {
     });
 });
 
-app.listen(process.env.PORT || 3000);
+app.listen(process.env.PORT || 80);
