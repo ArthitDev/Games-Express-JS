@@ -95,26 +95,27 @@ function processComments(games, res) {
 }
 
 app.post('/games', (req, res) => {
-    const { game_name, game_description, img, game_type, game_id, comment, vote, username } = req.body;
-    if (game_id === undefined) {
+    const { comment, game_id, vote, username, game_name, game_description, img, game_type } = req.body;
+    if (comment !== undefined && game_id !== undefined && vote !== undefined && username !== undefined) {
+        const commentSql = "INSERT INTO games_comments (comment, game_id, vote, username) VALUES (?, ?, ?, ?)";
+        connection.query(commentSql, [comment, game_id, vote, username], (err) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({ status: 'error', message: 'Error บรรทัด 104 เพิ่มความคิดเห็นไม่เข้า' });
+            }
+            res.json({ status: 'success', message: 'เพิ่มความคิดเห็นสำเร็จแล้ว' });
+        });
+    } else if (game_name !== undefined && game_description !== undefined && img !== undefined && game_type !== undefined) {
         const gameSql = "INSERT INTO games (game_name, game_description, img, game_type) VALUES (?, ?, ?, ?)";
         connection.query(gameSql, [game_name, game_description, img, game_type], (err) => {
             if (err) {
                 console.error(err);
-                return res.status(500).json({ status: 'error', message: 'Error บรรทัด 104 เพิ่มเกม ไม่เข้า' });
+                return res.status(500).json({ status: 'error', message: 'Error บรรทัด 113 เพิ่มเกมไม่เข้า' });
             }
-            res.json({ status: 'success', message: 'เพิ่มเกมแล้ว' });
+            res.json({ status: 'success', message: 'เพิ่มเกมสำเร็จแล้ว' });
         });
-    }
-    else {
-        const commentSql = "INSERT INTO games_comments (game_id, comment, vote, username) VALUES (?, ?, ?, ?)";
-        connection.query(commentSql, [game_id, comment, vote, username], (err) => {
-            if (err) {
-                console.error(err);
-                return res.status(500).json({ status: 'error', message: 'Error บรรทัด 114 Comment ไม่เข้า' });
-            }
-            res.json({ status: 'success', message: 'เพิ่มความคิดเห็นแล้ว' });
-        });
+    } else {
+        res.status(400).json({ status: 'error', message: 'ไม่มี Request นี้' });
     }
 });
 
