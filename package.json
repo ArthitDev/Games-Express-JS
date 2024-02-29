@@ -8,6 +8,7 @@
     "nodemon": "^3.1.0"
   },
   "scripts": {
-    "webserver": "nodemon server.js"
+    "webserver": "nodemon server.js",
+    "start": "node server.js"
   }
 }
