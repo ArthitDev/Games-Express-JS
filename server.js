@@ -100,7 +100,7 @@ app.put('/games/:game_id', (req, res) => {
             return res.status(500).json({ status: 'error', message: 'Error updating record' });
         }
 
-        res.json({ status: 'success', message: 'Record updated successfully' });
+        res.json({ status: 'success', message: 'Record updated successfully !' });
     });
 });
 
